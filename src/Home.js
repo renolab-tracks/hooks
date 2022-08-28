@@ -17,16 +17,20 @@ export default function Home() {
   const [themeColor, setThemeColor] = useState("red");
 
   const [name, setName] = useState("Default");
+  const [duplicate, setDuplicate] = useState(0);
 
-  const numb = slowFunction(digit);
+  // const numb = slowFunction(digit);
 
   const numbMemoized = useMemo(() => {
     return slowFunction(digit);
   }, [digit]);
 
-  const numbCb = useCallback(() => {
-    return slowFunction(digit);
-  }, [digit]);
+  const numbCb = useCallback(
+    (number) => {
+      return number * slowFunction(digit);
+    },
+    [digit]
+  );
 
   // const theme = { color: themeColor };
 
@@ -37,6 +41,10 @@ export default function Home() {
   useEffect(() => {
     console.log("theme changed");
   }, [theme]);
+
+  useEffect(() => {
+    setDuplicate(numbCb(2));
+  }, [numbCb]);
 
   function getInitialBooks() {
     console.log("get init books");
@@ -51,19 +59,18 @@ export default function Home() {
     return 2 * number;
   }
 
-  function slowFunctionMaker(number) {
-    return () => {
-      for (var i = 0; i < 1000000000; i++) {}
-      return 2 * number;
-    };
-  }
-
   const inputElement = React.useRef();
 
   const focusInput = () => {
     inputElement.current.focus();
+  };
+
+  const updateName = () => {
+    setName("Rand" + Math.floor(Math.random() * 10));
+  };
+
+  const updateNumber = () => {
     setDigit((prevDigit) => prevDigit + 1);
-    setName("Focus");
   };
 
   React.useEffect(() => {
@@ -92,7 +99,7 @@ export default function Home() {
         Theme : {theme.color} {name}
       </h1>
       <h2>Number : {numbMemoized}</h2>
-      <h2> Number CB : {numbCb()}</h2>
+      <h2> Number CB : {duplicate}</h2>
       <button
         onClick={() => {
           setId("9781491924464");
@@ -111,6 +118,10 @@ export default function Home() {
       </button>
       <input type="text" ref={inputElement} />
       <button onClick={focusInput}>Focus Input</button>
+      <div></div>
+      <button onClick={updateName}>Set Name</button>
+      <button onClick={updateNumber}>Double Number</button>
+
       <ul>
         {books.items.map(({ volumeInfo }, index) => (
           <li key={index}>

@@ -4,6 +4,8 @@ import Home from "./Home";
 import About from "./About";
 import Users from "./Users";
 import Header from "./Header";
+import BookDetails from "./BookDetails";
+import Todos from "./Todo";
 
 export default function RoutesIndex() {
   return (
@@ -14,8 +16,10 @@ export default function RoutesIndex() {
               renders the first one that matches the current URL. */}
         <Routes>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/todos" element={<Todos />}></Route>
           <Route path="/about" element={<About />}></Route>
           <Route path="/users" element={<Users />}></Route>
+          <Route path="/book/:id" element={<BookDetails />}></Route>
         </Routes>
       </div>
     </Router>
